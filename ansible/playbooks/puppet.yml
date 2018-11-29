@@ -1,0 +1,6 @@
+---
+
+- name: Instalando Puppet nas maquinas
+  hosts: all
+  roles:
+    - puppet 

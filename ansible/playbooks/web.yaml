@@ -1,0 +1,4 @@
+- name: Instalando apache e fazendo deploy
+  hosts: all
+  roles:
+    - web

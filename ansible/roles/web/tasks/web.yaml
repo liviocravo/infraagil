@@ -1,0 +1,6 @@
+
+- name: Fazendo deploy do apache
+  template:
+    src: templates/padrao
+    dest: /var/www/html/index.html
+

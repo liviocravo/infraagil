@@ -1,0 +1,19 @@
+- name: Instalando pacote do apache no centos
+  package:
+    name:
+      - httpd
+  when: ansible_os_family == "RedHat"
+
+
+- name: Instalando pacote do apache para debian
+  package:
+    name:
+      - apache2
+  when: ansible_os_family == "Debian" 
+
+
+- name: dando start di centos
+  service:
+    name: httpd
+    state: started
+  when: ansible_os_family == "RedHat" 

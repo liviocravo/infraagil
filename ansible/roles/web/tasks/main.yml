@@ -1,0 +1,8 @@
+---
+# tasks file for web
+
+- name: playbook para criar servidor apache em qualquer distro
+  include: apache.yaml
+
+- name: playbook para fazer deploy do apache
+  include: web.yaml
