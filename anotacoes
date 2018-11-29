@@ -1,0 +1,690 @@
+Gabriel Policante - Linkedin
+gabi dias - linux
+
+google cloud da uma maquina de graça de 1 core e 512mb
+ss -ntpl -> network tcp port list
+
+https://docs.ansible.com/ansible/latest/modules/modules_by_category.html
+openssl passwd -1
+ansible all -m setup
+modulo lookup substitui variavel pra nao precisar por senha em arquivo
+
+ansible - faz deploy
+puppet/chef - gerente de configuracao - verifica se teve alteracao e arruma (nao usa ssh, usa ssl. Ou seja, ele consegue ate voltar a senha do root)
+
+gpolicante
+infraagil
+
+no vagrant workspace
+vagrantfile - pra criar o arquivo -> vagrant init
+pra subir o box - vagrant up 
+vagrant status
+vagrant box list
+vagrant ssh -nome da máquina-
+
+
+Ansible
+*nao é master to nodes - slide 41
+
+inventario dinamico vmware ansible - pesquisar
+alta disponibilidade multicloud - video do gabriel
+
+
+
+root@devops:~# cat /etc/hosts
+127.0.0.1	localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1	ip6-localhost	ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+ff02::3	ip6-allhosts
+127.0.1.1	devops.dexter.com.br	devops
+
+192.168.33.150 automation.dexter.com.br 
+192.168.33.151 devops.dexter.com.br 
+192.168.33.152 docker.dexter.com.br 
+root@devops:~# hostname -A
+devops.dexter.com.br 
+root@devops:~# cat /etc/hosts
+127.0.0.1	localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1	ip6-localhost	ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+ff02::3	ip6-allhosts
+127.0.1.1	devops.dexter.com.br	devops
+
+192.168.33.150 automation.dexter.com.br 
+192.168.33.151 devops.dexter.com.br 
+192.168.33.152 docker.dexter.com.br 
+root@devops:~# hostname -A
+devops.dexter.com.br 
+
+root@devops:~# ss -ntpl | grep 22
+LISTEN     0      128          *:22                       *:*                   users:(("sshd",pid=1253,fd=3))
+LISTEN     0      128         :::22                      :::*                   users:(("sshd",pid=1253,fd=4))
+root@devops:~# ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=63 time=9.14 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=63 time=9.47 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=63 time=10.7 ms
+64 bytes from 8.8.8.8: icmp_seq=4 ttl=63 time=9.90 ms
+64 bytes from 8.8.8.8: icmp_seq=5 ttl=63 time=8.46 ms
+^C
+--- 8.8.8.8 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4007ms
+rtt min/avg/max/mdev = 8.467/9.549/10.755/0.764 ms
+root@devops:~#
+
+
+liberar ssh pro root
+/etc/ssh/sshd_config
+
+systemctl restart ssh
+service sshd restart
+
+apt - fica com a barrinha amarela rsrs
+apt update
+apt install software-properties-common -y
+apt-ass-repository ppa:ansible/ansible
+apt update && apt install ansible -y
+
+host_key_checking = False  # pra nao dar a mensagem do fingerprint na primeira vez que loga
+private_key_file = /etc/keys/devops.pem
+
+100dd - apaga 100 linhas
+
+
+se der erro em um modulo naquela maquina, o ansible nao tenta os proximos
+
+
+
+- name: verificando as opcoes disponiveis de variavel
+      debug:
+        var: pacote
+
+
+
+
+
+
+
+
+
+
+criar uma playbook com o nome exercicio.yaml
+
+criar 3 usuarios em todas as maquinas: devops, developer e {{seunome}} como varivel
+
+instalar os pacotes em todas as maquinas: htop, vim, cowsay e figlet
+
+criar um arquivo com o nome index com o conteudo "infra agil na 4linux" e enviar somente pa
+
+
+
+roles
+
+ansible-galaxy init confbase
+roles
+vars - a variavel ali nao precisa ser inicializada na role, playbook
+templates - as variaveis sao substiruidas de acordo com a maquina
+tests - se funcionou um modulo ele faz outro (if)
+tasks - nossas tarefas
+handlers - se um modulo funcionar ele faz o outro, dependencia entre modulos
+defaults - entradas padroes - ex nome de instalacao dopacote é o mesmo
+files - trabalhar com arquivos sem passar nome completo
+meta - 
+
+
+playbook -> role -> tasks - main]
+
+Instalar um servidor web em qualquer distro criar um site com o conteudo:
+
+<marque>
+<h1>
+
+HOSTNAME DA MAQUINA = $HOSTNAMEMAQUINA
+<br>
+DISTRO DA MAQUINA = $DISTROMAQUINA
+
+</h1>
+</marquee>
+
+
+
+
+
+
+
+PUPPET - Gerenciador de de configuração nos ambiente
+Usa SSL (não precisa de SSH)
+Agent to Master
+Padronização da Infraestrutura
+|Integridade no ambiente
+Controle da infraestrutura
+Automacao de tarefas
+Agilidade nas mudanças
+
+Server tem que estar com a porta 8140 aberta no firewall pros agents chegarem nele, nao o contrario
+
+
+puppet resource user
+puppet resource user --to_yaml
+puppet resource user linus --to_yaml
+puppet resource user linus ensure=present
+puppet resource user linus ensure=absent
+root@devops:~# puppet resource user linus ensure=present home="/srv/linus"
+Notice: /User[linus]/ensure: created
+user { 'linus':
+  ensure => 'present',
+  home   => '/srv/linus',
+}
+root@devops:~#
+
+Se colocar na mesma sintaxe que serve no inventario ja garente
+
+puppet resource service --to_yaml
+puppet resource service [name] ensure=stopped
+puppet resource package
+
+root@devops:~# puppet resource package ntpdate
+package { 'ntpdate':
+  ensure => 'purged',
+}
+
+
+root@devops:~# puppet resource package ntpdate ensure=present
+Notice: /Package[ntpdate]/ensure: created
+package { 'ntpdate':
+  ensure => '1:4.2.8p4+dfsg-3ubuntu5.9',
+}
+
+root@devops:~# puppet resource package ntpdate ensure=absent
+Notice: /Package[ntpdate]/ensure: removed
+package { 'ntpdate':
+  ensure => 'absent',
+}
+
+
+atraves do facter o puppet sabe as informacoes do SO
+
+root@devops:~# facter ipaddress
+10.0.2.15
+root@devops:~
+
+
+root@devops:~# puppet resource package puppetserver
+package { 'puppetserver':
+  ensure => '5.3.6-1xenial',
+}
+root@devops:~# puppet resource service puppetserver
+service { 'puppetserver':
+  ensure => 'stopped',
+  enable => 'false',
+}
+root@devops:~# puppet resource service puppetserver ensure=running
+
+
+
+manifests
+node "default" #todas as maquinas
+node /(devops|automation).dexter.com.br/ #range de maquinas
+node docker.dexter.com.br # uma unica maquina
+puppet forge -> manifestos prontos
+
+
+root@devops:/etc/puppetlabs/code/environments/production/modules/config/manifests# pdk new module config
+puppet:/// = /etc/puppetlabs/code/environments/production
+
+foreman -> interface gráfica pro puppet
+awx e tower(pago) -> interface gráfica para o ansible
+
+
+puppet config print -> variaveis do puppet
+
+tem que dar include no module dentro do manifests do enviroemnr
+
+puppet agent -t --server devops.dexter.com.br
+Info: Caching certificate for ca
+Info: csr_attributes file loading from /etc/puppetlabs/puppet/csr_attributes.yaml
+Info: Creating a new SSL certificate request for docker.dexter.com.br
+Info: Certificate Request fingerprint (SHA256): DD:BA:03:4E:45:C2:81:61:12:70:3A:32:C1:52:BA:08:49:CA:D7:E0:50:F8:29:D9:FD:E1:9A:52:86:1D:E7:47
+Info: Caching certificate for ca
+ -> quando nao tiver o server da pra passar  o comando
+
+no server
+puppet cert list
+puppet cert sign docker.dexter.com.br
+
+
+autosign=$confdir/autosign.conf -> pra assinar todos agents que tentarem. Dentro do arquivo vc coloca o dominio que pode acessar
+
+
+
+
+
+
+
+DOCKER
+DOCKER SWARM -> orquestrador (gerenciador de clusters), bom pra aprender. No Kubernetes não tem muita visão. Openshift é uma interface web para o kubernetes (a gui do kubernetes é ruim. docker swarm (tem que fazer na mão) -> kubernetes (inteligente) -> openshift (interface)
+
+docker swarm init (cluster
+minikube pra aprender kubernetes, manda pro usr/bin. Pra aprender a administrar o kubernetes. Pra o minishift é bom pra aprender openshift.
+Curso presencial da 4linux, o EAD não tem kubernetes
+
+
+Ferramenta para gerenciar chroot (area isolada no SO)
+deu nome de containner para o chroot
+pode ter um sistema operacional inteiro, ou apenas o que a sua aplicação precisa ficando mais leve
+separa a aplicacao em containners, cada microsservico em um containner, cada microsservico com um banco de dados (aplicacao stateless, se houver dependencia aplicacao statefull). Fazendo assim, cada microsserviço pode subir mais containners de acordo com o uso.
+
+chroot é uma operação que altera o diretório raiz aparente para o processo atual de execução e seus filhos. Um programa que é executado em tal ambiente modificado não consegue acessar os arquivos e comandos fora dessa árvore de diretórios ambiental.
+
+
+no sistema operacional vc instala apenas o docker engine, as libs vc instala no containner
+para-virtualizador - é binario é virtualizado, não é tangivel... porém ele não separa os recursos como um virtualizador, todas os containners dividem os recursos do SO. Nao tem kernel.
+
+
+API GATEWAY - kong ou traefik
+
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
+
+nao da pra atualizar, precisa remover e instalar um novo, por causa de um bug com o systemd
+
+docker container run (create + start) -> criar e rodar o container
+docker container run --name primeiro (nome do container) debian (imagem)  
+	verifica se existe a imagem do container, se nao existir ele baixa a imagem oficial
+
+se tem mais de uma imagem que usa o mesmo step ele nao baixa de novo
+registry - repositorio de imagens local
+na hora de fazer o commit vc pode passar a tag de versão com :versao, no padrao é latest, se vc nao mudar ele vai sempre sobrescrever. Tambem pode ser usado pra separar ambiente
+
+layer1 imagem
+layer2 container
+
+a imagem é formada por staps, exemplo: baixei a imagem do debian(com 1 ou mais staps), instalei o apache (mais um stap), isntalei o site (outro stap), se baixar outra imagem que usa um stap ja baixado, nao vai baixar de novo
+Quando olha o tamanho da imagem ele soma os staps mas ele nao ta usando esse espaço de verdade, é apenas pra vc saber quanto espaco precisa.
+
+docker container run = docker run
+
+docker container ls
+docker run --name segundo debian /bin/ls /etc
+
+root@docker:~# docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+root@docker:~# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
+4ba0fd69d666        debian              "ls -a /tmp"        7 minutes ago       Exited (0) 7 minutes ago                        terceiro
+ac15d08534a3        debian              "/bin/ls /etc"      14 minutes ago      Exited (0) 14 minutes ago                       segundo
+14fc143eb2be        debian              "bash"              2 hours ago         Exited (0) 2 hours ago                          primeiro
+root@docker:~#
+
+root@docker:~# docker ps -qa
+4ba0fd69d666
+ac15d08534a3
+14fc143eb2be
+
+
+docker container run -ti  debian /bin/bash
+t= terminal
+i= interativo
+
+ele segura o container ativo, pra nao cair quando sair ctrl+pq
+attach se conecta num ativo
+docker exec -ti primeiro bash -> se conecta no container atraves de um novo processo sem interromper o entrypoint. Nao precisa de ctrl +pq pra sair pq eh um novo processo
+
+
+root@docker:~# docker cp primeiro:/srv/devops .
+root@docker:~# ls -lrt
+total 24
+drwxr-xr-x 2 livio livio  4096 Nov 22 11:33 $1$UtmWOFF7$iLOOdnqzVtXjYt8SoqKiu0
+-rw-r--r-- 1 root  root  14001 Nov 28 13:06 get-docker.sh
+-rw-r--r-- 1 root  root     54 Nov 28 16:10 devops
+root@docker:~# cat devops
+ESTE E UMA ARQUIVO TESTE DENTRO DO CONTAINER PRIMEIRO
+root@docker:~# echo "haha consigo copiar vc pra fora do container" >> devops
+root@docker:~# docker cp devops primeiro:/srv/devops
+root@docker:~# docker exec primeiro cat /srv/devops
+ESTE E UMA ARQUIVO TESTE DENTRO DO CONTAINER PRIMEIRO
+haha consigo copiar vc pra fora do container
+root@docker:~#
+
+docker pull alpine (imagem mais zerada do mundo: 4mb)
+
+docker rmi (deleta imagens)
+
+#criando imagem a partir de um container
+root@docker:~# docker commit primeiro htopdebian:v1
+sha256:9f35d2185c3536ce8e992baa7aaf4060394d03ac3015ba243d89a2e99d498987
+root@docker:~# docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+htopdebian          v1                  9f35d2185c35        9 seconds ago       148MB
+debian              latest              4879790bd60d        12 days ago         101MB
+alpine              latest              196d12cf6ab1        2 months ago        4.41MB
+root@docker:~#
+
+#exportando imagem para um arquivo
+root@docker:~# docker export primeiro > envio.tar
+root@docker:~# ll
+total 150204
+drwx------  6 root  root       4096 Nov 28 16:33 ./
+drwxr-xr-x 24 root  root       4096 Nov 28 10:52 ../
+drwxr-xr-x  2 livio livio      4096 Nov 22 11:33 $1$UtmWOFF7$iLOOdnqzVtXjYt8SoqKiu0/
+drwx------  3 root  root       4096 Nov 26 16:36 .ansible/
+-rw-------  1 root  root       1433 Nov 28 13:08 .bash_history
+-rw-r--r--  1 root  root       3106 Oct 22  2015 .bashrc
+drwx------  2 root  root       4096 Nov 26 15:42 .cache/
+-rw-r--r--  1 root  root         99 Nov 28 16:21 devops
+-rw-r--r--  1 root  root  153745408 Nov 28 16:33 envio.tar
+-rw-r--r--  1 root  root      14001 Nov 28 13:06 get-docker.sh
+-rw-r--r--  1 root  root        148 Aug 17  2015 .profile
+drwx------  2 root  root       4096 Nov 26 15:41 .ssh/
+-rw-------  1 root  root       1839 Nov 28 12:02 .viminfo
+root@docker:~
+
+register: deixar imagens no register
+
+#importa uma imagem de um arquivo
+root@docker:~# cat envio.tar | docker import - novonome:v2
+sha256:2cd150afec914666717bd8bde1521389a1445c2dda78ab22916fb85583aafac8
+root@docker:~#
+
+
+DOCKER FILE
+Dockerfile com D maiusculo
+
+FROM debian
+RUN apt-get update
+RUN apt-get install vim htop -y
+COPY devops /srv/
+CMD /bin/bash
+ENTRYPOINT -> pra chumbar o entrypoitn e nao deixar mudar
+
+docker build -t deploy . -> criando imagem a partir de docker file
+
+#criar mapeamento entre os diretorios (tipo um NFS) da maquina fisica e do container
+#volume estático do docker (gerenciado pelo usuario)
+docker run -ti --name segundo -v /srv/data:/data deploy
+
+
+#volume estativo do docker (gerenciado pelo docker)
+oot@docker:/srv/data# docker volume create --name backup
+backup
+root@docker:/srv/data# docker volume ls
+DRIVER              VOLUME NAME
+local               backup
+root@docker:/srv/data# 
+
+não faz diferencao onde ta executando
+
+docker run -ti --name volume-teste -v backup:/data deploy bash
+
+root@docker:/srv/data# docker volume inspect backup
+[
+    {
+        "CreatedAt": "2018-11-28T17:33:30Z",
+        "Driver": "local",
+        "Labels": {},
+        "Mountpoint": "/var/lib/docker/volumes/backup/_data",
+        "Name": "backup",
+        "Options": {},
+        "Scope": "local"
+    }
+]
+
+
+#o d é de deatach pra não abrir o terminal, apesar disso o container ta ativo e posso entrar nele posteriormente
+docker run -dti --name volume-teste2   -v backup:/data deploy bash
+
+o volume estatico pode ser usado pra guardar arquivos de aplicacao por exemplo, pra economizar espaço
+
+docker run -d --name nginxweb nginx
+root@docker:/var/lib/docker/volumes/backup/_data# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+4de61e72b16c        nginx               "nginx -g 'daemon of…"   44 seconds ago      Up 43 seconds       80/tcp              nginxweb
+
+usar expose pra expor porta
+não passei entrypoint, mas ele pegou o padrao no dockerfile
+
+docker inspect nginxweb
+traz informacoes do container
+ip do gateway é o da vm hospedeira
+
+
+# docker proxy
+root@docker:/var/lib/docker/volumes/backup/_data# docker run -d --name nginxweb1 -p 8080:80 nginx
+55430a6eeb4771e23b842d277dc0b8a89851314bef9f35816f10f35a9dcf25f6
+root@docker:/var/lib/docker/volumes/backup/_data#
+
+docker não trabalha com virtual host, entao pra usar precisaria de um serviço externo, possibilitando o uso de mais de uma porta
+
+#escolhendo hostname pro container
+docker run -d --name nomecontainer --hostname hostnamemaquina alpine
+
+
+# criando uma nova rede pro cluster de containers
+root@docker:/var/lib/docker/volumes/backup/_data# docker network create --subnet 10.0.0.0/24 dexterlan
+7c358a2c35de5d70e10a0376f9435ee00ce7646549e11b6e8940f77c166da84e
+root@docker:/var/lib/docker/volumes/backup/_data# docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+e0c25c5cfd7f        bridge              bridge              local
+7c358a2c35de        dexterlan           bridge              local
+50890f98b8a6        host                host                local
+049293057c40        none                null                local
+root@docker:/var/lib/docker/volumes/backup/_data#
+
+
+#subindo container na rede dexterlan
+root@docker:/var/lib/docker/volumes/backup/_data# docker run -d --name node01 --net dexterlan debian
+47c4a97cf28cd71ce8e232b482c8221555baa0099f7bfe426668b4df08c12ee7
+root@docker:/var/lib/docker/volumes/backup/_data#
+
+# se usa ro proxy não da pra usar a mesma vm pra mais de um site, então vamos usar o nginx pra mandar pra 2 apaches
+docker run -d --name site1 -v site1:/usr/local/apache2/htdocs httpd
+
+
+       upstream backend {
+                server 172.17.0.8;
+                server 172.17.0.9;
+        }
+
+        server {
+                listen 80;
+                location / { proxy_pass http://backend; }
+        }
+
+
+root@docker:/etc/nginx/sites-enabled# pwd
+/etc/nginx/sites-enabled
+root@docker:/etc/nginx/sites-enabled# ls
+docker.conf
+root@docker:/etc/nginx/sites-enabled# 
+
+
+
+DOCKER COMPOSE (compose file)
+arquivo em yml que vai subir a infraestrutura de containers
+
+curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+chmod +x /usr/local/bin/docker-compose
+
+mkdir -p /root/compose/wordpress
+
+
+wordpress_dexter:
+  image: wordpress
+  links:
+    - mysql_dexter:mysql
+  ports:
+    - 8081:80
+
+mysql_dexter:
+  image: mariadb
+  environment:
+    MYSQL_ROOT_PASSWORD: dexter
+
+
+vim docker-compose.yml -> se não tiver usando orquestrador o arquivo do compose precisa ser com esse nome
+docker-compose up -d
+
+
+NOTAS: cluster d ebando de dados nao funciona em container, senhas em variaveis, tem que ter um lugar pra sessao e apontar pra onde ta o bd
+
+
+
+
+docker volume create portainer_data
+docker run -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+
+
+
+root@docker:~/compose/wordpress# docker swarm init
+Error response from daemon: could not choose an IP address to advertise since this system has multiple addresses on different interfaces (10.0.2.15 on enp0s3 and 192.168.33.152 on enp0s8) - specify one with --advertise-addr
+root@docker:~/compose/wordpress# docker swarm init --advertise-addr 192.168.33.152
+Swarm initialized: current node (n23jovt3ffydv65cb96edsdbi) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-31w3579cb8fmskmxha08tbcddhdz26pgac72yebytr2myf61nm-7kaz40v8bjar3ppenv2fvvakl 192.168.33.152:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+root@docker:~/compose/wordpress#
+
+
+loga numa máquina que vc quer que participe do cluster e roda esse comando:
+docker swarm join --token SWMTKN-1-31w3579cb8fmskmxha08tbcddhdz26pgac72yebytr2myf61nm-7kaz40v8bjar3ppenv2fvvakl 192.168.33.152:2377
+ai varias vms vão funcionar commo cluster
+procurar stack-swarm no github do gpolicante que tem um compose pronto
+
+
+root@docker:~/compose/wordpress# docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+n23jovt3ffydv65cb96edsdbi *   docker              Ready               Active              Leader              18.09.0
+root@docker:~/compose/wordpress# docker stack ls
+NAME                SERVICES            ORCHESTRATOR
+root@docker:~/compose/wordpress# docker service ls
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+root@docker:~/compose/wordpress#
+
+
+
+
+GIT
+
+git init
+git status
+git add [file] -> adicionei no index
+git commit -m "[mensagem que descreve a alteracao]" -> manda pro repositorio
+git log -> mostra últimas alterações
+git config --global user.name "Livio Cravo Martins"
+user.mail
+
+git add . ou --all
+
+git log --oneline
+3e9151c adicionando o redis como cache
+2f0ed13 adicionado oo arquivo conf.php para exemplo
+
+git revert 3e9151c
+
+git branch #checar branchs
+
+git checkout -b homolog #criando branch homolog
+
+git checkout [nome] muda de branch
+
+
+
+git diff developer homolog
+diff --git a/index.html b/index.html
+deleted file mode 100644
+index f060d69..0000000
+--- a/index.html
++++ /dev/null
+@@ -1,10 +0,0 @@
+-<marquee>
+-
+-<h1>
+-SHOW
+-<br>
+-testando a branch
+-
+-</h1>
+-
+-</marquee>
+
+
+
+git merge developer
+Already up-to-date.
+root@devops:~/aula# ls
+conf.php  index.html
+root@devops:~/aula# 
+
+
+git remote -v # mostra urls de repositorios remostos
+
+git remote add repo https://github.com/liviocravo/525.git #adiciona repositorio remoto
+
+git push repo homolog #envia branch homolog pro repositorio
+
+git clone https://github.com/liviocravo/525.git #clona o repositorio e ja fica com o repositorio remoto
+
+
+git clone -b master https://github.com/liviocravo/525.git # clona apenas a branch master
+
+
+GIT LAB
+pra instalar o git lab community, é necessário seguir a documentacao oficial e trocar ee por ce
+
+vim /etc/gitlab/gitlab.rb -> trocar URL
+gitlab-ctl reconfigure -> depois de qualquer mudança na configucao
+
+
+
+RUNDECK
+Se não tiver memória ele nao sobe e nao loga, precisa olhar no dmesg
+
+Na tela de criação de projeto, vc coloca as configurações padroes pra todos as builds
+
+No rundeck vc pode mandar ele executar o build no node ou na maquina do rundeck
+quando o rundeck instala ele cria um usurio, ele precisa ter acesso aos diretorios de trabalho
+
+
+
+
+
+
+git clone http://192.168.33.151/root/site.git /tmp/site/
+
+systemctl start docker 
+
+docker rm -f site || true
+
+docker run -d --name site -p 8080:80 -v /tmp/site:/usr/local/apache2/htdocs httpd
+
+curl 192.168.33.151:8080 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

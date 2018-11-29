@@ -1,0 +1,15 @@
+---
+- name: Instalando rundeck na muquina automation
+  hosts: automation
+  tasks:
+    - name: atualizando repositorio
+      yum:
+        name: http://repo.rundeck.org/latest.rpm
+        state: present
+
+    - name: instalando o java e o rundeck
+      package:
+        name: "{{item}}"
+      with_items:
+        - java
+        - rundeck
