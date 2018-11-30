@@ -751,6 +751,11 @@ roles_path    = /etc/ansible/roles
 
 
 
+CLOUD
+
+SaaS -> Software as a Service -> Gmail, skype, whats, netflix
+PaaS -> Plataform as a Service -> Openshift, Kubernetes, Esteira Devops
+IaaS -> Infrastructure as a Service -> Google Cloud (3,2%), AWS (51%), Azure (4,3%)
 
 
 
