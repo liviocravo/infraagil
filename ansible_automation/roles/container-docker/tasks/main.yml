@@ -1,0 +1,21 @@
+---
+# tasks file for container-docker
+
+- name: criando os volumes do docker
+  docker_volume:
+    name: "{{item}}"
+    state: present
+  with_items: 
+    - blue
+    - green
+
+- name: criando o container blue e green
+  docker_container:
+    name: "{{item}}"
+    image: httpd
+    state: started
+    volumes:
+      - "{{item}}:/usr/local/apache2/htdocs"
+  with_items:
+    - blue
+    - green

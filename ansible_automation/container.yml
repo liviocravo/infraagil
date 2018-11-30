@@ -1,0 +1,5 @@
+---
+- name: executando a playbook que cria os volumes e os containers
+  hosts: docker
+  roles:
+    - container-docker

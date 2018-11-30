@@ -1,0 +1,5 @@
+---
+- name: playbook que verifica em qual ambiente o deploy deve ser realido e o executa
+  hosts: docker
+  roles:
+    - deploy-bluegreen

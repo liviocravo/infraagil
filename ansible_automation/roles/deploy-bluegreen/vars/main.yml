@@ -1,0 +1,5 @@
+---
+# vars file for deploy-bluegreen
+
+jenkinsdir: /var/lib/jenkins/workspace
+dockerdir: /var/lib/docker/volumes
