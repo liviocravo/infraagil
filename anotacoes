@@ -676,7 +676,78 @@ docker run -d --name site -p 8080:80 -v /tmp/site:/usr/local/apache2/htdocs http
 curl 192.168.33.151:8080 
 
 
+###############################################################################################################################
 
+JENKINS
+
+plugin build pipeline
+variaveis de ambiente: WORKSPACE
+
+
+
+ls /var/lib/jenkins/workspace/
+apagando diretorio  copiando_arquivo  devops
+[root@automation ~]# 
+
+
+no web hook vc pode ir em avancado e usar token pra configurar
+git lab admin -> settings network > Outbound requests -> Allow requests to the local network from hooks and services 
+
+gitlab livio dexter2018
+jenkins dexter2018
+
+
+
+
+DEVOPS
+
+BlueGreen deployment
+Canary deployment
+
+
+
+Projeto : pre reqs     ->          pre docker       ->    App
+
+Jenkins precisa garantir os pre reqs:
+Ansible playbook prereqs
+- git - na automation (mesma que ta o jenkins) por causa do workspace
+- docker - na maquina docker, instalado e rodando (pra gerenciar os containerd=s do docker no ansible, precisamos do docker-py que é instalado via python-pip)
+- nginx (instalado e rodando) - proxy reverso
+
+Pode rodar em qualquer lugar, pois ele vai atende ros pre reqs
+
+Se fosse usar o puppet poderia garantir os processos rodando e instalados, pois caso alguem alterasse depois de criado a aplicação ficaria indisponivel
+
+Conhecimento: Migration -> banco de dados
+
+
+Pré-Docker
+blue
+green
+volume estatico
+
+App
+O deploy vai ser feito no volume estatico
+verificar no conf (sites-enabled) do nginx qual ambiente ta sendo apontado pra poder inverter o arquivo de configuração (pra nao ficar indisponivel)
+
+depois que decidir em qual ambiente vai ser feito o deploy, deve fazer o deploy e depois trocar a configuração
+-copy workspace pro que nao ta sendo apontado
+- pega ip docker, apaga vhost antigo: trocar apontamento (virtual host pode ser um template, quando vc for trocar o ambiente só precisa trocar as variaveis)
+restartar nginx 
+
+
+
+
+# additional paths to search for roles in, colon separated
+roles_path    = /etc/ansible/roles
+
+# uncomment this to disable SSH key host checking
+ 71 host_key_checking = False
+
+
+# default user to use for playbooks if user is not specified
+106 # (/usr/bin/ansible will use current user as default)
+107 remote_user = root
 
 
 
